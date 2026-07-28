@@ -105,6 +105,10 @@ Run a shortstat first. Review a diff under 300 changed lines in full. For larger
 
 Infer and announce the most relevant non-interactive test command. Run it automatically when feasible and use CI-safe flags such as `CI=true` when appropriate. Ask before commands that appear destructive, long-running, integration-dependent, or likely to require external services. If no reliable command exists, say why tests were not run.
 
+### Review follow-up
+
+Consolidate overlapping findings before fixes. If fixes need review, continue the original review session for one targeted check of addressed findings and direct regressions. Start a fresh full review only for unresolved Critical or High findings or material scope expansion.
+
 ## Approval Boundaries
 
 ### Commit authorization

@@ -135,6 +135,10 @@ Classify baseline changes against the track spec and plan as related, unrelated,
 - A `task` plan containing nested checkbox sub-tasks conflicts with its declaration and is malformed.
 - If no recognized task remains but unfinished checkbox work exists in an unrecognized structure, halt as malformed.
 
+### Delegated work continuity
+
+Task status granularity controls state, not delegation. For same-scope follow-up, continue the delegated session when supported, especially for tests, fixes, and review findings. Start fresh only for changed scope or unavailable continuation; do not persist runtime handles in Architect artifacts.
+
 ### Implementation modes
 
 - Manual Mode preserves every human confirmation in the workflow.

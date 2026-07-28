@@ -53,6 +53,15 @@ class ArchitectImplementContractTests(unittest.TestCase):
                 self.assertIn("continue until finalization", content)
                 self.assertIn("task size and unfinished phases", content)
 
+    def test_task_status_does_not_force_fresh_delegation(self) -> None:
+        protocol = read(
+            "skills/architect-implement/references/implement-track-protocol.md"
+        )
+
+        self.assertIn("controls state, not delegation", protocol)
+        self.assertIn("continue the delegated session", protocol)
+        self.assertIn("do not persist runtime handles", protocol)
+
     def test_final_commit_is_required_in_skill_protocol_and_project_template(self) -> None:
         paths = (
             "skills/architect-implement/SKILL.md",
@@ -134,6 +143,14 @@ class ArchitectReviewContractTests(unittest.TestCase):
         self.assertNotIn("ConfirmInferredRange", flow)
         self.assertNotIn("ConfirmScope", flow)
         self.assertNotIn("Diff --> Volume", flow)
+
+    def test_review_follow_up_is_targeted_and_continues_the_session(self) -> None:
+        protocol = read("skills/architect-review/references/review-protocol.md")
+
+        self.assertIn("Consolidate overlapping findings", protocol)
+        self.assertIn("continue the original review session", protocol)
+        self.assertIn("one targeted check", protocol)
+        self.assertIn("material scope expansion", protocol)
 
 
 if __name__ == "__main__":
