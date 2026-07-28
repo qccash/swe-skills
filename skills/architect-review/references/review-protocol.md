@@ -107,7 +107,7 @@ Infer and announce the most relevant non-interactive test command. Run it automa
 
 ### Review follow-up
 
-Consolidate overlapping findings before fixes. If fixes need review, continue the original review session for one targeted check of addressed findings and direct regressions. Start a fresh full review only for unresolved Critical or High findings or material scope expansion.
+Consolidate overlapping findings and batch approved fixes by component. If fixes need review, continue the original review session for one targeted check of addressed findings and direct regressions, then report its findings through the normal decision flow. Start a fresh full review over the original scope plus all review-fix and materially expanded delta only for unresolved Critical or High findings or material scope expansion.
 
 ## Approval Boundaries
 
@@ -235,7 +235,7 @@ When findings exist, ask:
 - Prompt: `How would you like to proceed with the review findings?`
 - Choices: `Apply Fixes`, `Manual Fix`, `Complete Track`
 
-`Apply Fixes` applies only supported findings and reruns relevant tests. `Manual Fix` stops. `Complete Track` accepts the findings without applying fixes. With no findings, continue directly.
+`Apply Fixes` batches supported findings by component, reruns relevant tests, then follows the review follow-up rule. `Manual Fix` stops. `Complete Track` accepts the findings without applying fixes. With no findings, continue directly.
 
 ### 7. Commit and record review changes
 
@@ -256,7 +256,7 @@ For track fixes, ask:
 On `Yes`:
 
 1. Append or reuse `## Phase: Review Fixes`.
-2. Reuse an active `Apply review suggestions` task; after a completed task, create `Apply review suggestions 2` or ask for a label when several exist.
+2. Group approved fixes by component under one active `Apply review suggestions` task; create a numbered task only for a separately approved later review cycle.
 3. Mark the task `[~]`, preserve approved fixes, and save the plan.
 4. If authorized, commit code with `architect(review): apply fixes for track <track_id>`.
 5. Mark the task `[x]` with the short SHA or `no-commit`.

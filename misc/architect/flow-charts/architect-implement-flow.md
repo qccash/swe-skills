@@ -29,14 +29,14 @@ flowchart TD
     NoWork -->|No| Finalize[Mark track completed and update metadata]
     NoWork -->|Yes| MarkParent[Mark the parent task in progress]
     MarkParent --> MetaTask{Is this the phase protocol meta-task?}
-    MetaTask -->|Yes| PhaseProtocol[Run phase verification and checkpoint protocol]
+    MetaTask -->|Yes| PhaseProtocol[Run phase-wide verification, optional independent review, and checkpoint protocol]
     MetaTask -->|No| UnitKind{Task unit or actionable sub-task?}
-    UnitKind -->|Task or no checkbox sub-tasks| Execute[Implement the parent and all required nested details]
+    UnitKind -->|Task or no checkbox sub-tasks| Execute[Implement the parent and nested details, continuing the phase session when available]
     UnitKind -->|Sub-task| MarkSub[Mark the next sub-task in progress]
     UnitKind -->|All checkbox sub-tasks complete| CompleteParent
-    MarkSub --> ExecuteSub[Implement the smallest correct sub-task change]
-    ExecuteSub --> Verify[Run workflow-required tests, coverage, docs, and checks]
-    Execute --> Verify[Run workflow-required tests, coverage, docs, and checks]
+    MarkSub --> ExecuteSub[Implement the smallest correct sub-task change in the current session]
+    ExecuteSub --> Verify[Run focused task checks]
+    Execute --> Verify[Run focused task checks]
     Verify -->|Failures beyond allowed attempts| AskGuidance[Ask user for guidance]
     AskGuidance --> UnitKind
     Verify -->|Pass| CompleteUnit{Which unit was executed?}
@@ -75,7 +75,8 @@ flowchart TD
     UpdateDocs --> MoreDocs{More documentation updates needed?}
     MoreDocs -->|Yes| DocMode
     MoreDocs -->|No| DocsReport
-    DocsReport --> FinalOptOut{User explicitly opted out of commits?}
+    DocsReport --> FinalVerify[Reuse valid phase results and run checks affected by post-phase changes]
+    FinalVerify --> FinalOptOut{User explicitly opted out of commits?}
     FinalOptOut -->|Yes| ReportUncommitted[Report completed track changes as uncommitted]
     FinalOptOut -->|No| StageFinal[Stage only inspected track-owned files or hunks]
     StageFinal --> SafeFinal{Staged diff isolated and valid?}

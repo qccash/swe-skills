@@ -33,10 +33,19 @@ flowchart TD
     Report --> Findings{Findings found?}
     Findings -->|No| CleanSummary[Report no findings and residual risks]
     Findings -->|Yes| NextAction[Ask how to proceed with findings]
-    NextAction -->|Apply fixes| ApplyFixes[Apply approved fixes only]
+    NextAction -->|Apply fixes| ApplyFixes[Consolidate findings and batch approved fixes by component]
     NextAction -->|Manual Fix| Summary
-    NextAction -->|Complete Track| CleanupEligible{Track cleanup is eligible?}
-    ApplyFixes --> ChangesMade{Did review fixes change files?}
+    NextAction -->|Complete Track| ChangesMade
+    ApplyFixes --> FollowUp{Review follow-up needed?}
+    FollowUp -->|Yes| TargetedReview[Continue the original review session for one targeted check]
+    FollowUp -->|No| ChangesMade
+    TargetedReview --> TargetedResult[Report targeted review result]
+    TargetedResult --> FollowUpResult{Critical or High unresolved, or material scope expansion?}
+    FollowUpResult -->|Yes| EffectiveScope[Combine original scope with review-fix and materially expanded delta]
+    EffectiveScope --> Volume
+    FollowUpResult -->|No| RemainingFindings{Any findings remain?}
+    RemainingFindings -->|Yes| NextAction
+    RemainingFindings -->|No| ChangesMade{Did review fixes change files?}
     ChangesMade -->|No| CleanupEligible
     ChangesMade -->|Yes| TrackContext{Active track context?}
     TrackContext -->|No| CommitAsk[Ask whether to commit non-track review fixes]
@@ -51,7 +60,7 @@ flowchart TD
     CommitFixes --> CleanupEligible
     CommitTrackFixes --> CleanupEligible
     MarkReviewTask --> CleanupEligible
-    CleanSummary --> CleanupEligible
+    CleanSummary --> ChangesMade
     CleanupEligible -->|No| Summary
     CleanupEligible -->|Yes| CleanupChoice[Offer archive, delete, or skip cleanup]
     CleanupChoice -->|Archive| ArchiveConfirm[Ask for archive confirmation with warnings]

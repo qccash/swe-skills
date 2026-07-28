@@ -137,7 +137,7 @@ Classify baseline changes against the track spec and plan as related, unrelated,
 
 ### Delegated work continuity
 
-Task status granularity controls state, not delegation. For same-scope follow-up, continue the delegated session when supported, especially for tests, fixes, and review findings. Start fresh only for changed scope or unavailable continuation; do not persist runtime handles in Architect artifacts.
+Task status granularity controls state, not delegation. Within one phase, continue the same delegated session for same-component tasks and follow-up tests, fixes, or review findings while recording each parent separately. Start fresh only for a new phase, changed scope, or unavailable continuation; do not persist runtime handles in Architect artifacts. Do not review each status unit independently; when independent review is needed, run it at phase verification and later review only uncovered final delta.
 
 ### Implementation modes
 
@@ -213,7 +213,7 @@ Loop sequentially:
 3. For a phase protocol meta-task, skip normal implementation and run Section 8.
 4. With `sub-task` granularity, for each actionable sub-task persist `[ ] -> [~]`, perform the work, then persist `[~] -> [x]`.
 5. With `task` granularity, perform all nested details as part of the active parent and do not add or update sub-task checkboxes.
-6. Follow workflow tests, coverage, documentation, and verification requirements.
+6. Run focused task checks; defer broad tests and required coverage to phase verification unless the workflow requires them earlier.
 7. Manual Mode uses the runtime interaction mechanism for required human gates. Auto Mode handles only phase-level gates automatically.
 8. Complete and record one parent task at a time; do not batch-complete parents.
 9. Mark the parent `[x]` only after all work selected by its granularity is complete.
@@ -228,13 +228,14 @@ Run when a phase protocol meta-task is selected or a phase without one completes
 
 1. Announce phase verification.
 2. Identify phase-changed code, verify corresponding tests, and add missing tests in project style.
-3. Announce and run required tests or coverage. Allow at most two fix cycles before asking for guidance.
-4. Generate manual verification from product, guidelines, and completed phase tasks.
-5. Manual Mode: present steps and wait for explicit confirmation.
-6. Auto Mode: execute feasible steps with tests, coverage, browser, CLI, API, or inspection; use the closest safe substitute and record limitations when direct execution is impossible.
-7. Auto Mode: create `architect(checkpoint): complete phase <phase_name>`.
-8. Manual Mode: create that checkpoint only when commits are explicitly authorized; otherwise report the skipped checkpoint and continue after verification approval.
-9. Record a checkpoint hash only after its commit succeeds. The hash line remains for a later authorized or final commit because the hash cannot exist inside its own checkpoint.
+3. Announce and run phase-wide required tests and coverage once, reusing passing results only while they remain valid for the current worktree. Rerun affected checks after fixes and allow at most two fix cycles before asking for guidance.
+4. When independent review is needed, review the phase delta once and keep its session for fixes.
+5. Generate manual verification from product, guidelines, and completed phase tasks.
+6. Manual Mode: present steps and wait for explicit confirmation.
+7. Auto Mode: execute feasible steps with tests, coverage, browser, CLI, API, or inspection; use the closest safe substitute and record limitations when direct execution is impossible.
+8. Auto Mode: create `architect(checkpoint): complete phase <phase_name>`.
+9. Manual Mode: create that checkpoint only when commits are explicitly authorized; otherwise report the skipped checkpoint and continue after verification approval.
+10. Record a checkpoint hash only after its commit succeeds. The hash line remains for a later authorized or final commit because the hash cannot exist inside its own checkpoint.
 
 For the generated phase protocol meta-task:
 
@@ -273,7 +274,7 @@ Report changed and unchanged documents. Keep routine sync in the final commit un
 
 ### 11. Final Implementation Commit
 
-Run only after implementation, bookkeeping, required verification, and documentation synchronization succeed.
+Run only after implementation, bookkeeping, required verification, and documentation synchronization succeed. Reuse valid phase results and run only checks affected by post-phase changes unless the workflow requires a final full matrix.
 
 Unless the user opts out:
 

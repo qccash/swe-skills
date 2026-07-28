@@ -51,7 +51,7 @@ For one parent task at a time:
 4. Write tests that define expected behavior and confirm the Red phase when feasible.
 5. Implement the minimum Green-phase change for the selected status unit.
 6. Refactor without changing behavior and rerun tests.
-7. Run relevant coverage and target more than 80% for new code.
+7. Run focused tests for the selected unit; defer phase-wide tests and required coverage to phase completion unless required earlier.
 8. Stop for approval before a significant tech-stack change; after approval, update `tech-stack.md` with a dated decision.
 9. Complete each selected sub-task state when using `sub-task` granularity, then repeat until the parent work is complete.
 10. Create an ordinary task commit only when explicitly authorized for this workflow. Auto Mode does not authorize ordinary task commits.
@@ -65,16 +65,17 @@ Run immediately when the last non-meta task in a phase completes:
 
 1. Announce verification start.
 2. Identify phase-changed code and ensure corresponding tests exist in project style.
-3. Announce and run automated tests or coverage. Attempt at most two fix cycles before requesting guidance.
-4. Generate manual verification steps from `product.md`, `product-guidelines.md`, and the phase tasks.
-5. Manual Mode: present the steps and wait for explicit confirmation.
-6. Auto Mode: execute feasible steps directly; use the closest safe automated substitute and record any limitation.
-7. Create `architect(checkpoint): complete phase <phase_name>` in Auto Mode, or in Manual Mode when checkpoint commits are explicitly authorized.
-8. Record the checkpoint SHA only after the commit succeeds. The hash line belongs to a later authorized or final commit because the hash cannot exist inside its own checkpoint.
+3. Announce and run phase-wide automated tests and required coverage once, reusing passing task results only while they remain valid for the current worktree and targeting more than 80% coverage for new code. Rerun affected checks after fixes and attempt at most two fix cycles before requesting guidance.
+4. When independent review is needed, review the phase delta once and keep its session for fixes.
+5. Generate manual verification steps from `product.md`, `product-guidelines.md`, and the phase tasks.
+6. Manual Mode: present the steps and wait for explicit confirmation.
+7. Auto Mode: execute feasible steps directly; use the closest safe automated substitute and record any limitation.
+8. Create `architect(checkpoint): complete phase <phase_name>` in Auto Mode, or in Manual Mode when checkpoint commits are explicitly authorized.
+9. Record the checkpoint SHA only after the commit succeeds. The hash line belongs to a later authorized or final commit because the hash cannot exist inside its own checkpoint.
 
 ## Final Track Commit
 
-After all tasks, verification, bookkeeping, and routine documentation synchronization succeed, create one final track-scoped commit unless the user explicitly opts out.
+After all tasks, verification, bookkeeping, and routine documentation synchronization succeed, reuse valid phase results and run checks affected by post-phase changes. Run the full verification matrix only when explicitly required, then create one final track-scoped commit unless the user explicitly opts out.
 
 1. Compare the final worktree with the implementation baseline.
 2. Stage only inspected files or hunks owned by the track and workflow.
